@@ -1,0 +1,5 @@
+load 'board.rb'
+board = Board.new
+
+board.move_piece([0,0], [0,1])
+
