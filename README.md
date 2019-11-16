@@ -1,5 +1,5 @@
 # chess
-App Academy (project][https://open.appacademy.io/learn/full-stack-online/ruby/chess--part-one-]
+Open App Academy's Chess [project](https://open.appacademy.io/learn/full-stack-online/ruby/chess--part-one-)
 
 ## Learning Goals
 
