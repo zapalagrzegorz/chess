@@ -1,5 +1,10 @@
 load 'board.rb'
 board = Board.new
 
-board.move_piece([0,0], [0,1])
+
+board.move_piece([1,0], [0,2])
+board.move_piece([0,1], [0,2])
+
+board[[4,4]] = Rook.new(:white,board, [4,4])
+board[[4,4]].moves
 

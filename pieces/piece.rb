@@ -1,10 +1,12 @@
+# require_relative "rook"
+# require_relative "null_piece"
+
 class Piece
   attr_reader :color, :board, :position
 
   def initialize(color, board, position)
     @color = color
     @board = board
-    # position: array
     @position = position
   end
 
@@ -15,6 +17,7 @@ class Piece
   end
 
   def valid_moves
+    moves
   end
 
   def pos=(val)

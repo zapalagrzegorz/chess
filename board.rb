@@ -1,6 +1,8 @@
 require "byebug"
-require_relative "null_piece"
-require_relative "piece"
+require_relative "pieces/piece"
+require_relative "pieces/null_piece"
+require_relative "pieces/rook"
+require_relative "pieces/slideable"
 
 class Board
   #   COLORS = [:white, :black]
@@ -48,7 +50,7 @@ class Board
     true if self[pos] == nil
   end
 
-  private
+  # private
 
   def [](pos)
     row, col = pos
