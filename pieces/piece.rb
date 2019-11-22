@@ -17,6 +17,7 @@ class Piece
   end
 
   def valid_moves
+    # moves implements Slideable
     moves
   end
 

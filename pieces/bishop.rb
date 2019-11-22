@@ -1,9 +1,9 @@
 require_relative "slideable"
 require_relative "piece"
 
-class Rook < Piece
+class Bishop < Piece
   include Slideable
-  DIRECTION = [:STRAIGHT].freeze
+  DIRECTION = [:DIAGONAL].freeze
 
   def initialize(color, board, position)
     super(color, board, position)
