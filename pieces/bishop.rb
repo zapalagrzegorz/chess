@@ -1,5 +1,5 @@
-require_relative "slideable"
 require_relative "piece"
+require_relative "slideable"
 
 class Bishop < Piece
   include Slideable
@@ -8,6 +8,12 @@ class Bishop < Piece
   def initialize(color, board, position)
     super(color, board, position)
   end
+
+  def symbol
+    "♝".colorize(color)
+  end
+
+  protected
 
   def move_dirs
     DIRECTION

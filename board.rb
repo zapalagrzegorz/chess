@@ -5,11 +5,14 @@ require_relative "pieces/rook"
 require_relative "pieces/bishop"
 require_relative "pieces/queen"
 require_relative "pieces/slideable"
+require_relative "pieces/knight"
+require_relative "pieces/pawn"
+require_relative "pieces/king"
 
 class Board
   #   COLORS = [:white, :black]
-  WHITE_STARTING_ROWS = [0, 1]
-  BLACK_STARTING_ROWS = [6, 7]
+  WHITE_STARTING_ROWS = [6, 7].freeze
+  BLACK_STARTING_ROWS = [0, 1].freeze
   PIECES_STARTING_ROWS = WHITE_STARTING_ROWS + BLACK_STARTING_ROWS
 
   attr_reader :rows
@@ -24,7 +27,7 @@ class Board
       end
     end
 
-    @sentinel = Null_piece.new
+    @sentinel = Null_piece.instance
   end
 
   # This should update the 2D grid and also the moved piece's position.
@@ -50,6 +53,10 @@ class Board
 
   def empty?(pos)
     true if self[pos] == nil
+  end
+
+  def valid_pos?(pos)
+    pos.all? { |coord| coord.between?(0, 7) }
   end
 
   # private

@@ -2,5 +2,5 @@ load 'board.rb'
 board = Board.new
 
 
-board[[4,5]] = Queen.new(:white,board, [4,5])
-board[[4,5]].moves
+board[[6,0]] = Pawn.new(:white,board, [6,0])
+board[[6,0]].moves

@@ -11,14 +11,17 @@ class Piece
   end
 
   def to_s
+    # print/ return symbol
   end
 
   def empty?
+    # z zasady false
   end
 
   def valid_moves
-    # moves implements Slideable
     moves
+    #  eleminuje ruchu, które mogą prowadzić do szacha
+    #  moves.reject { |end_pos| move_into_check?(end_pos) }
   end
 
   def pos=(val)
@@ -27,6 +30,8 @@ class Piece
   end
 
   def symbol
+    # subclass implements this with unicode chess char
+    # raise NotImplementedError
   end
 
   def inspect

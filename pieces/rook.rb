@@ -12,4 +12,7 @@ class Rook < Piece
   def move_dirs
     DIRECTION
   end
+
+  def symbol
+  end
 end
