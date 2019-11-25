@@ -1,20 +1,26 @@
 # require_relative "rook"
 # require_relative "null_piece"
+require "colorize"
 
 class Piece
-  attr_reader :color, :board, :position
+  attr_reader :color, :board
+  attr_accessor :position
 
   def initialize(color, board, position)
     @color = color
     @board = board
     @position = position
+
+    #    board.add_piece(self, pos)
   end
 
   def to_s
     # print/ return symbol
+    " #{symbol} "
   end
 
   def empty?
+    raise NotImplementedError
     # z zasady false
   end
 
@@ -24,19 +30,15 @@ class Piece
     #  moves.reject { |end_pos| move_into_check?(end_pos) }
   end
 
-  def pos=(val)
-    # valid_moves
-    @position = val
-  end
-
   def symbol
     # subclass implements this with unicode chess char
-    # raise NotImplementedError
+    raise NotImplementedError
   end
 
   def inspect
     { color: color,
-      position: position }.inspect
+      position: position,
+      symbol: symbol }.inspect
   end
 
   private

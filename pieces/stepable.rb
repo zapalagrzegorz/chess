@@ -6,7 +6,7 @@ module Stepable
     # move_diffs
     row_idx, column_idx = self.position
 
-    debugger
+    # debugger
     possible_coords = move_diffs.map do |(dx, dy)|
       [row_idx + dx, column_idx + dy]
     end

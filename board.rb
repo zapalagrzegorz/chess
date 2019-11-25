@@ -15,19 +15,23 @@ class Board
   BLACK_STARTING_ROWS = [0, 1].freeze
   PIECES_STARTING_ROWS = WHITE_STARTING_ROWS + BLACK_STARTING_ROWS
 
+  FIGURE_PIECES = [Rook, Knight, Bishop, Queen, King, Bishop, Knight, Rook].freeze
+
   attr_reader :rows
 
   # Write code for #initialize so we can setup the board
   # with instances of Piece in locations where a Queen/Rook/Knight/
   # etc. will start and nil where the NullPiece will start.
   def initialize
-    @rows = Array.new(8) do |row_index|
-      Array.new(8) do |col_index|
+    @sentinel = Null_piece.instance
+
+    @rows = Array.new(8) { Array.new(8, @sentinel) }
+
+    @rows.each_index do |row_index|
+      @rows[row_index].each_index do |col_index|
         fill_initial_piece(row_index, col_index)
       end
     end
-
-    @sentinel = Null_piece.instance
   end
 
   # This should update the 2D grid and also the moved piece's position.
@@ -52,7 +56,7 @@ class Board
   end
 
   def empty?(pos)
-    true if self[pos] == nil
+    self[pos].empty?
   end
 
   def valid_pos?(pos)
@@ -74,12 +78,37 @@ class Board
   def fill_initial_piece(row_index, col_index)
     if PIECES_STARTING_ROWS.include?(row_index)
       if WHITE_STARTING_ROWS.include?(row_index)
-        return Piece.new(:white, self, [row_index, col_index])
+        add_piece_white(row_index, col_index)
+        # return Piece.new(:white, self, [row_index, col_index])
       else
-        return Piece.new(:black, self, [row_index, col_index])
+        add_piece_black(row_index, col_index)
       end
     else
       return nil
+    end
+  end
+
+  def add_piece(piece, pos)
+    self[pos] = piece
+  end
+
+  private
+
+  def add_piece_white(row_index, col_index)
+    pos = [row_index, col_index]
+    add_piece(Pawn.new(:white, self, pos), pos) if row_index == 6
+
+    if row_index == 7
+      add_piece(FIGURE_PIECES[col_index].new(:white, self, pos), pos)
+    end
+  end
+
+  def add_piece_black(row_index, col_index)
+    pos = [row_index, col_index]
+    add_piece(Pawn.new(:black, self, pos), pos) if row_index == 1
+
+    if row_index.zero?
+      add_piece(FIGURE_PIECES[col_index].new(:black, self, pos), pos)
     end
   end
 end

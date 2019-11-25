@@ -1,4 +1,5 @@
 require "byebug"
+require "colorize"
 
 require_relative "piece"
 
@@ -12,11 +13,18 @@ class Pawn < Piece
   # end
 
   def moves
+    debugger
     forward_steps + side_attacks
   end
 
   def symbol
     "♟".colorize(color)
+  end
+
+  def inspect
+    { color: color,
+      position: position,
+      symbol: symbol }.inspect
   end
 
   private
@@ -38,20 +46,21 @@ class Pawn < Piece
     pawn_row, pawn_column = position
 
     forward = pawn_row + forward_dir
-    forward_tile = board[[forward, pawn_column]]
+    # forward_tile = board[[forward, pawn_column]]
+    pos = [forward, pawn_column]
 
-    if forward_tile.nil?
-      moves << [forward, pawn_column]
+    if board.empty?(pos)
+      moves << pos
     else
       return []
     end
 
     if at_start_row?
       double_forward = pawn_row + forward_dir * 2
-      double_forward_tile = board[[double_forward, pawn_column]]
-
-      if double_forward_tile.nil?
-        moves << [double_forward, pawn_column]
+      # double_forward_tile = board[[double_forward, pawn_column]]
+      pos = [double_forward, pawn_column]
+      if board.empty?(pos)
+        moves << pos
       end
     end
 
@@ -73,7 +82,7 @@ class Pawn < Piece
 
       diagonal_tile = board[pos]
 
-      !diagonal_tile.nil? && diagonal_tile.color != color
+      !board.empty?(pos) && diagonal_tile.color != color
     end
   end
 end

@@ -32,26 +32,29 @@ module Slideable
   end
 
   def check_top(moves, row_idx, column_idx)
-    while self.board[[row_idx, column_idx]].nil? && row_idx >= 0
-      moves << [row_idx, column_idx]
+    pos = [row_idx, column_idx]
+
+    while board.empty?(pos) && board.valid_pos?(pos)
+      moves << pos
       row_idx -= 1
     end
 
-    if row_idx >= 0 && self.board[[row_idx, column_idx]]&.color != self.color
-      moves << [row_idx, column_idx]
+    if board.valid_pos?(pos) && self.board[pos]&.color != self.color
+      moves << pos
     end
 
     moves
   end
 
   def check_bottom(moves, row_idx, column_idx)
-    while self.board[[row_idx, column_idx]].nil? && row_idx <= 7
-      moves << [row_idx, column_idx]
+    pos = [row_idx, column_idx]
+    while board.empty?([pos]) && board.valid_pos?(pos)
+      moves << pos
       row_idx += 1
     end
 
-    if row_idx <= 7 && self.board[[row_idx, column_idx]].color != self.color
-      moves << [row_idx, column_idx]
+    if board.valid_pos?(pos) && self.board[pos].color != self.color
+      moves << pos
     end
 
     moves
@@ -65,27 +68,29 @@ module Slideable
   end
 
   def check_right(moves, row_idx, column_idx)
-    while self.board[[row_idx, column_idx]] == nil && column_idx <= 7
-      moves << [row_idx, column_idx]
+    pos = [row_idx, column_idx]
+    while board.empty?(pos) && board.valid_pos?(pos)
+      moves << pos
       column_idx += 1
     end
 
-    if column_idx <= 7 && self.board[[row_idx, column_idx]]&.color != self.color
-      moves << [row_idx, column_idx]
+    if board.valid_pos?(pos) && board[pos]&.color != self.color
+      moves << pos
     end
 
     moves
   end
 
   def check_left(moves, row_idx, column_idx)
-    while self.board[[row_idx, column_idx]].nil? && column_idx >= 0
-      moves << [row_idx, column_idx]
+    pos = [row_idx, column_idx]
+    while board.empty?(pos) && board.valid_pos?(pos)
+      moves << pos
       column_idx -= 1
     end
 
     # safe operator po prostu zwraca nil, nie rzuca błędem
-    if column_idx >= 0 && board[[row_idx, column_idx]]&.color != self.color
-      moves << [row_idx, column_idx]
+    if board.valid_pos?(pos) && board[pos]&.color != self.color
+      moves << pos
     end
 
     moves
@@ -106,13 +111,14 @@ module Slideable
   end
 
   def check_diagonal_top_right(moves, row_idx, column_idx)
-    while self.board[[row_idx, column_idx]].nil? && row_idx >= 0 && column_idx <= 7
-      moves << [row_idx, column_idx]
+    pos = [row_idx, column_idx]
+    while board.empty?(pos) && board.valid_pos?(pos)
+      moves << pos
       row_idx -= 1
       column_idx += 1
     end
 
-    if row_idx >= 0 && column_idx <= 7 && self.board[[row_idx, column_idx]]&.color != self.color
+    if board.valid_pos?(pos) && board[[row_idx, column_idx]]&.color != self.color
       moves << [row_idx, column_idx]
     end
 
@@ -120,44 +126,51 @@ module Slideable
   end
 
   def check_diagonal_top_left(moves, row_idx, column_idx)
-    while self.board[[row_idx, column_idx]].nil? && row_idx >= 0 && column_idx >= 0
-      moves << [row_idx, column_idx]
+    pos = [row_idx, column_idx]
+    while board.empty?(pos) && board.valid_pos?(pos)
+      moves << pos
       row_idx -= 1
       column_idx -= 1
     end
 
-    if row_idx >= 0 && column_idx >= 0 && self.board[[row_idx, column_idx]]&.color != self.color
-      moves << [row_idx, column_idx]
+    if row_idx >= 0 && column_idx >= 0 && board[pos]&.color != self.color
+      moves << pos
     end
 
     moves
   end
 
   def check_diagonal_bottom_right(moves, row_idx, column_idx)
-    while self.board[[row_idx, column_idx]].nil? && row_idx <= 7 && column_idx <= 7
-      moves << [row_idx, column_idx]
+    pos = [row_idx, column_idx]
+    while board.empty?(pos) && board.valid_pos?(pos)
+      moves << pos
       row_idx += 1
       column_idx += 1
     end
 
-    if row_idx <= 7 && column_idx <= 7 && self.board[[row_idx, column_idx]]&.color != self.color
-      moves << [row_idx, column_idx]
+    if board.valid_pos?(pos) && board[pos]&.color != self.color
+      moves << pos
     end
 
     moves
   end
 
   def check_diagonal_bottom_left(moves, row_idx, column_idx)
-    while self.board[[row_idx, column_idx]].nil? && row_idx <= 7 && column_idx >= 0
-      moves << [row_idx, column_idx]
+    pos = [row_idx, column_idx]
+    while board.empty?(pos) && board.valid_pos?(pos)
+      moves << pos
       row_idx += 1
       column_idx -= 1
     end
 
-    if row_idx <= 7 && column_idx >= 0 && self.board[[row_idx, column_idx]]&.color != self.color
-      moves << [row_idx, column_idx]
+    if row_idx <= 7 && column_idx >= 0 && self.board[pos]&.color != self.color
+      moves << pos
     end
 
     moves
+  end
+
+  def move_dirs
+    raise NotImplementedError
   end
 end

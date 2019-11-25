@@ -9,10 +9,13 @@ class Rook < Piece
     super(color, board, position)
   end
 
-  def move_dirs
-    DIRECTION
+  def symbol
+    "♜".colorize(color)
   end
 
-  def symbol
+  protected
+
+  def move_dirs
+    DIRECTION
   end
 end
