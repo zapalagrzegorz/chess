@@ -7,11 +7,10 @@ class Piece
   attr_accessor :position
 
   def initialize(color, board, position)
+    #    board.add_piece(self, pos)
     @color = color
     @board = board
     @position = position
-
-    #    board.add_piece(self, pos)
   end
 
   def to_s
@@ -20,8 +19,7 @@ class Piece
   end
 
   def empty?
-    raise NotImplementedError
-    # z zasady false
+    false
   end
 
   def valid_moves

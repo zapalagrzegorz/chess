@@ -5,8 +5,7 @@ module Slideable
     row_idx, column_idx = self.position
 
     if self.move_dirs.include?(:STRAIGHT)
-
-      # debugger
+      debugger
       moves = check_vertical(moves, row_idx, column_idx)
 
       moves = check_horizontal(moves, row_idx, column_idx)
@@ -34,9 +33,10 @@ module Slideable
   def check_top(moves, row_idx, column_idx)
     pos = [row_idx, column_idx]
 
-    while board.empty?(pos) && board.valid_pos?(pos)
+    while board.valid_pos?(pos) && board.empty?(pos)
       moves << pos
       row_idx -= 1
+      pos = [row_idx, column_idx]
     end
 
     if board.valid_pos?(pos) && self.board[pos]&.color != self.color
@@ -48,9 +48,10 @@ module Slideable
 
   def check_bottom(moves, row_idx, column_idx)
     pos = [row_idx, column_idx]
-    while board.empty?([pos]) && board.valid_pos?(pos)
+    while board.valid_pos?(pos) && board.empty?(pos)
       moves << pos
       row_idx += 1
+      pos = [row_idx, column_idx]
     end
 
     if board.valid_pos?(pos) && self.board[pos].color != self.color
@@ -69,9 +70,10 @@ module Slideable
 
   def check_right(moves, row_idx, column_idx)
     pos = [row_idx, column_idx]
-    while board.empty?(pos) && board.valid_pos?(pos)
+    while board.valid_pos?(pos) && board.empty?(pos)
       moves << pos
       column_idx += 1
+      pos = [row_idx, column_idx]
     end
 
     if board.valid_pos?(pos) && board[pos]&.color != self.color
@@ -83,9 +85,10 @@ module Slideable
 
   def check_left(moves, row_idx, column_idx)
     pos = [row_idx, column_idx]
-    while board.empty?(pos) && board.valid_pos?(pos)
+    while board.valid_pos?(pos) && board.empty?(pos)
       moves << pos
       column_idx -= 1
+      pos = [row_idx, column_idx]
     end
 
     # safe operator po prostu zwraca nil, nie rzuca błędem
@@ -112,10 +115,11 @@ module Slideable
 
   def check_diagonal_top_right(moves, row_idx, column_idx)
     pos = [row_idx, column_idx]
-    while board.empty?(pos) && board.valid_pos?(pos)
+    while board.valid_pos?(pos) && board.empty?(pos)
       moves << pos
       row_idx -= 1
       column_idx += 1
+      pos = [row_idx, column_idx]
     end
 
     if board.valid_pos?(pos) && board[[row_idx, column_idx]]&.color != self.color
@@ -127,10 +131,11 @@ module Slideable
 
   def check_diagonal_top_left(moves, row_idx, column_idx)
     pos = [row_idx, column_idx]
-    while board.empty?(pos) && board.valid_pos?(pos)
+    while board.valid_pos?(pos) && board.empty?(pos)
       moves << pos
       row_idx -= 1
       column_idx -= 1
+      pos = [row_idx, column_idx]
     end
 
     if row_idx >= 0 && column_idx >= 0 && board[pos]&.color != self.color
@@ -142,10 +147,11 @@ module Slideable
 
   def check_diagonal_bottom_right(moves, row_idx, column_idx)
     pos = [row_idx, column_idx]
-    while board.empty?(pos) && board.valid_pos?(pos)
+    while board.valid_pos?(pos) && board.empty?(pos)
       moves << pos
       row_idx += 1
       column_idx += 1
+      pos = [row_idx, column_idx]
     end
 
     if board.valid_pos?(pos) && board[pos]&.color != self.color
@@ -157,13 +163,14 @@ module Slideable
 
   def check_diagonal_bottom_left(moves, row_idx, column_idx)
     pos = [row_idx, column_idx]
-    while board.empty?(pos) && board.valid_pos?(pos)
+    while board.valid_pos?(pos) && board.empty?(pos)
       moves << pos
       row_idx += 1
       column_idx -= 1
+      pos = [row_idx, column_idx]
     end
 
-    if row_idx <= 7 && column_idx >= 0 && self.board[pos]&.color != self.color
+    if board.valid_pos?(pos) && self.board[pos]&.color != self.color
       moves << pos
     end
 

@@ -13,7 +13,7 @@ class Pawn < Piece
   # end
 
   def moves
-    debugger
+    # debugger
     forward_steps + side_attacks
   end
 

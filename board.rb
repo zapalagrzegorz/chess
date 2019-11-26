@@ -42,15 +42,14 @@ class Board
   #   est out Board#move_piece(start_pos, end_pos), does it raise an error when there is no piece at the start? Does it successfully update the Board?
   def move_piece(start_pos, end_pos)
     # start_row, start_col = start_pos
+    debugger
     raise NoFigureError if empty?(start_pos)
 
-    if end_pos.any? { |pos| !pos.between?(0, 7) }
-      raise OutOfBoardError
-    end
+    raise OutOfBoardError unless valid_pos?(end_pos)
 
     self[end_pos] = self[start_pos]
-    self[start_pos].pos = end_pos
-    self[start_pos] = nil
+    self[start_pos].position = end_pos
+    self[start_pos] = @sentinel
 
     true
   end
@@ -63,9 +62,8 @@ class Board
     pos.all? { |coord| coord.between?(0, 7) }
   end
 
-  # private
-
   def [](pos)
+    # debugger
     row, col = pos
     @rows[row][col]
   end
@@ -75,6 +73,7 @@ class Board
     @rows[row][col] = val
   end
 
+  # private
   def fill_initial_piece(row_index, col_index)
     if PIECES_STARTING_ROWS.include?(row_index)
       if WHITE_STARTING_ROWS.include?(row_index)
