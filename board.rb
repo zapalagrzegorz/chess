@@ -42,7 +42,7 @@ class Board
   #   est out Board#move_piece(start_pos, end_pos), does it raise an error when there is no piece at the start? Does it successfully update the Board?
   def move_piece(start_pos, end_pos)
     # start_row, start_col = start_pos
-    debugger
+    # debugger
     raise NoFigureError if empty?(start_pos)
 
     raise OutOfBoardError unless valid_pos?(end_pos)

@@ -12,7 +12,7 @@ class Null_piece < Piece
   # a więc trzeba wcześniej mu podać właściwości
 
   def initialize
-    @symbol = " "
+    @symbol = "☐"
     @color = :none
   end
 

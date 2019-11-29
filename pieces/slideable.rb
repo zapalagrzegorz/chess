@@ -5,7 +5,7 @@ module Slideable
     row_idx, column_idx = self.position
 
     if self.move_dirs.include?(:STRAIGHT)
-      debugger
+      # debugger
       moves = check_vertical(moves, row_idx, column_idx)
 
       moves = check_horizontal(moves, row_idx, column_idx)

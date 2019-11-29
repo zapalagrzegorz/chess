@@ -1,6 +1,2 @@
-load 'board.rb'
-board = Board.new
-
-
-board[[6,0]] = Pawn.new(:white,board, [6,0])
-board[[6,0]].moves
+load 'display.rb'
+display = Display.new(Board.new)
