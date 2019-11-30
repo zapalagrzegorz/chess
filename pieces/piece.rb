@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 # require_relative "rook"
 # require_relative "null_piece"
-require "colorize"
+require 'colorize'
 
 class Piece
   attr_reader :color, :board
@@ -23,9 +25,8 @@ class Piece
   end
 
   def valid_moves
+    #  eleminować ruchy, które mogą prowadzić do szacha
     moves
-    #  eleminuje ruchu, które mogą prowadzić do szacha
-    #  moves.reject { |end_pos| move_into_check?(end_pos) }
   end
 
   def symbol
@@ -39,8 +40,8 @@ class Piece
       symbol: symbol }.inspect
   end
 
+  #  moves.reject { |end_pos| move_into_check?(end_pos) }
   private
 
-  def move_into_check
-  end
+  def move_into_check; end
 end

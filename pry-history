@@ -1,2 +1,6 @@
-load 'display.rb'
-display = Display.new(Board.new)
+load 'board.rb'
+board = Board.new
+:q
+
+board.test_check_mate
+

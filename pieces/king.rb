@@ -1,8 +1,9 @@
+# frozen_string_literal: true
 
-require "byebug"
+require 'byebug'
 
-require_relative "stepable"
-require_relative "piece"
+require_relative 'stepable'
+require_relative 'piece'
 
 class King < Piece
   include Stepable
@@ -15,7 +16,7 @@ class King < Piece
     [1, 0], # bottom
     [1, -1], # bottom-left
     [0, -1], # left
-    [-1, -1], # top-left
+    [-1, -1] # top-left
   ].freeze
 
   def initialize(color, board, position)
@@ -23,7 +24,7 @@ class King < Piece
   end
 
   def symbol
-    "♔".colorize(color)
+    '♔'.colorize(color)
   end
 
   protected
