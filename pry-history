@@ -1,6 +1,15 @@
-load 'board.rb'
-board = Board.new
-:q
 
-board.test_check_mate
+load 'display.rb'
+
+board = Board.new
+q:
+
+board.move_piece([6, 5], [5, 5])
+board.move_piece([1, 4], [3, 4])
+board.move_piece([6, 6], [4, 5])
+board.move_piece([0, 3], [4, 7])
+Display.new(board, true).render
+
+
+
 
