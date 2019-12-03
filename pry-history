@@ -11,5 +11,13 @@ board.move_piece([0, 3], [4, 7])
 Display.new(board, true).render
 
 
+--
+load 'board.rb'
+
+board = Board.new
+:q
+
+board.test_check_mate
+board.checkmate?(:black)
 
 

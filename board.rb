@@ -93,8 +93,15 @@ class Board
     king_threathened?(opposing_pieces, king_pos)
   end
 
-  def checkmate?
-    return true if in_check?(color) && player_pieces.valid_moves.zero?
+  def checkmate?(color)
+    player_pieces = find_color_pieces(color)
+    # debugger
+    player_moves = player_pieces.reduce(0) do |memo, piece|
+      # debugger
+      memo + piece.valid_moves.length
+    end
+
+    return true if in_check?(color) && player_moves.zero?
     # end
   end
 
@@ -129,6 +136,19 @@ class Board
     raise NoFigureError if opposing_pieces.empty?
 
     opposing_pieces
+  end
+
+  def find_color_pieces(color)
+    pieces = []
+    rows.each do |row|
+      row.each do |tile|
+        pieces << tile if tile.color == color
+      end
+    end
+
+    raise NoFigureError if pieces.empty?
+
+    pieces
   end
 
   def king_threathened?(pieces, king_pos)
