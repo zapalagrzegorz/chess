@@ -25,11 +25,9 @@ class Piece
     false
   end
 
-  # You will want a method on Piece that filters out the
-  # moves of a Piece that would leave the player in check.
+  # filters out moves of piece that would leave player in check.
   def valid_moves
     valid_moves = moves.reject do |move|
-      # debugger
       move_into_check?(move)
     end
 
@@ -53,31 +51,10 @@ class Piece
   def move_into_check?(end_pos)
     # Duplicate the Board and perform the move
     # debugger
-    board_dup = deep_dup(@board)
+    board_dup = @board.deep_dup
 
     # Look to see if the player is in check after the move (Board#in_check?)
-    board_dup.move_piece(position, end_pos)
+    board_dup.move_piece!(position, end_pos)
     board_dup.in_check?(@color)
-  end
-
-  def deep_dup(board)
-    Marshal.load(Marshal.dump(board))
-    # TODO check it again
-
-    # return [] if arr.length.zero?
-    # duped_board = board.dup
-    # # debug_index = 0
-    # board.rows.each_with_index do |row, row_idx|
-    #   # debugger
-    #   duped_board.rows[row_idx] = row.dup
-    # end
-    # debugger
-    # row.each_with_index do |tile, tile_idx|
-    # unless tile.empty?
-    # duped_board.rows[row_idx][tile_idx] = tile.dup
-    # end
-    # end
-    # end
-    # duped_board
   end
 end

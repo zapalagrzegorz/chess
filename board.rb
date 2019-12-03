@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "byebug"
+require_relative "exceptions"
 require_relative "pieces/piece"
 require_relative "pieces/null_piece"
 require_relative "pieces/rook"
@@ -41,11 +42,20 @@ class Board
 
     raise OutOfBoardError unless valid_pos?(end_pos)
 
+    # debugger
+    raise InvalidMoveError unless self[start_pos].valid_moves.include?(end_pos)
+
     self[end_pos] = self[start_pos]
     self[start_pos].position = end_pos
     self[start_pos] = @sentinel
 
     true
+  end
+
+  def move_piece!(start_pos, end_pos)
+    self[end_pos] = self[start_pos]
+    self[start_pos].position = end_pos
+    self[start_pos] = @sentinel
   end
 
   def empty?(pos)
@@ -57,14 +67,12 @@ class Board
   end
 
   def [](pos)
-    # debugger
     row, col = pos
     @rows[row][col]
   end
 
   def []=(pos, val)
     row, col = pos
-    # debugger
     @rows[row][col] = val
   end
 
@@ -88,18 +96,16 @@ class Board
     king_pos = find_king(color)
 
     opposing_color = color == :white ? :black : :white
-    opposing_pieces = find_opposing_pieces(opposing_color)
+    opposing_pieces = find_color_pieces(opposing_color)
 
     king_threathened?(opposing_pieces, king_pos)
   end
 
   def checkmate?(color)
     player_pieces = find_color_pieces(color)
-    # debugger
-    player_moves = player_pieces.reduce(0) do |memo, piece|
-      # debugger
+    player_moves = player_pieces.reduce(0) { |memo, piece|
       memo + piece.valid_moves.length
-    end
+    }
 
     return true if in_check?(color) && player_moves.zero?
     # end
@@ -108,9 +114,30 @@ class Board
   def test_check_mate
     move_piece([6, 5], [5, 5])
     move_piece([1, 4], [3, 4])
-    move_piece([6, 6], [4, 5])
+    move_piece([6, 6], [4, 6])
     move_piece([0, 3], [4, 7])
     in_check?(:white)
+  end
+
+  def deep_dup
+    Marshal.load(Marshal.dump(self))
+    # TODO check it again
+
+    # return [] if arr.length.zero?
+    # duped_board = board.dup
+    # # debug_index = 0
+    # board.rows.each_with_index do |row, row_idx|
+    #   # debugger
+    #   duped_board.rows[row_idx] = row.dup
+    # end
+    # debugger
+    # row.each_with_index do |tile, tile_idx|
+    # unless tile.empty?
+    # duped_board.rows[row_idx][tile_idx] = tile.dup
+    # end
+    # end
+    # end
+    # duped_board
   end
 
   private
@@ -173,23 +200,5 @@ class Board
     if row_index.zero?
       add_piece(FIGURE_PIECES[col_index].new(:black, self, pos), pos)
     end
-  end
-end
-
-class NoFigureError < StandardError
-  def message
-    "No figure found at this position. Please retry"
-  end
-end
-
-class NoKingError < StandardError
-  def message
-    'Couldn\'t found King! piece'
-  end
-end
-
-class OutOfBoardError < StandardError
-  def message
-    "Move has to finish on the board. Please retry."
   end
 end

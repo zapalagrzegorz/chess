@@ -7,14 +7,12 @@ module Slideable
     row_idx, column_idx = self.position
 
     if self.move_dirs.include?(:STRAIGHT)
-      # debugger
       moves = check_vertical(moves, row_idx, column_idx)
 
       moves = check_horizontal(moves, row_idx, column_idx)
     end
 
     if self.move_dirs.include?(:DIAGONAL)
-      # debugger
       moves = check_diagonal_top(moves, row_idx, column_idx)
 
       moves = check_diagonal_bottom(moves, row_idx, column_idx)
