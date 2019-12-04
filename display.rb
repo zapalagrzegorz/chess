@@ -16,33 +16,27 @@ class Display
   end
 
   def render
-    @board.rows.each do |row|
-      # join rzutuje każdy element tablicy na string (to_s)
-      puts " #{row.join(" ")}"
-    end
-
-    until @cursor.get_input
+    selected_tiles = []
+    until selected_tiles.length == 2
       system("clear")
-      valid_moves = @board[@cursor.cursor_pos].valid_moves
-      printable_board = ""
-      cur_row = @cursor.cursor_pos[0]
-      cur_idx = @cursor.cursor_pos[1]
-      @board.rows.each_with_index do |row, row_idx|
-        printable_board += "\n"
 
-        row.each_index do |tile_idx|
-          if row_idx == cur_row && tile_idx == cur_idx
-            printable_board += row[tile_idx].to_s.colorize(background: :yellow)
-          elsif valid_moves.any? { |move| move[0] == row_idx && move[1] == tile_idx }
-            printable_board += row[tile_idx].to_s.colorize(background: :blue)
-          else
-            # debugger
-            printable_board += row[tile_idx].to_s
-          end
+      valid_moves =
+        if selected_tiles.any?
+          @board[selected_tiles[0]].valid_moves
+        else
+          @board[@cursor.cursor_pos].valid_moves
         end
-      end
-      puts printable_board
-      # debugger
+
+      print_board_options = {
+        cur_row: @cursor.cursor_pos[0],
+        cur_idx: @cursor.cursor_pos[1],
+        valid_moves: valid_moves,
+      }
+
+      puts printable_board(print_board_options)
+
+      move = @cursor.get_input
+      selected_tiles << move if @board[move].valid_moves.any?
 
       if @debug
         # debugger
@@ -53,9 +47,33 @@ class Display
         puts "Is black in check? #{@board.in_check?(:black)}"
       end
     end
+
+    selected_tiles
   end
 
   private
+
+  def printable_board(cur_row:, cur_idx:, valid_moves:)
+    printable_board = "#{(0..7).to_a.join(" ")}"
+
+    @board.rows.each_with_index do |row, row_idx|
+      printable_board += "\n"
+      printable_board += "#{row_idx} "
+
+      row.each_index do |tile_idx|
+        if row_idx == cur_row && tile_idx == cur_idx
+          printable_board += row[tile_idx].to_s.colorize(background: :yellow)
+        elsif valid_moves.any? { |move| move[0] == row_idx && move[1] == tile_idx }
+          printable_board += row[tile_idx].to_s.colorize(background: :blue)
+        else
+          # debugger
+          printable_board += row[tile_idx].to_s
+        end
+      end
+    end
+
+    printable_board
+  end
 
   def print_cursor(row)
     cursor_col = @cursor.cursor_pos[1]

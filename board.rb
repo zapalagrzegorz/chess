@@ -42,7 +42,6 @@ class Board
 
     raise OutOfBoardError unless valid_pos?(end_pos)
 
-    # debugger
     raise InvalidMoveError unless self[start_pos].valid_moves.include?(end_pos)
 
     self[end_pos] = self[start_pos]
