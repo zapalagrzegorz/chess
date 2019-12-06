@@ -12,8 +12,8 @@ require_relative "pieces/knight"
 require_relative "pieces/pawn"
 require_relative "pieces/king"
 
+# Szachownica
 class Board
-  #   COLORS = [:white, :black]
   WHITE_STARTING_ROWS = [6, 7].freeze
   BLACK_STARTING_ROWS = [0, 1].freeze
   PIECES_STARTING_ROWS = WHITE_STARTING_ROWS + BLACK_STARTING_ROWS
@@ -37,10 +37,12 @@ class Board
     end
   end
 
-  def move_piece(start_pos, end_pos)
+  def move_piece(start_pos, end_pos, current_color)
     raise NoFigureError if empty?(start_pos)
 
     raise OutOfBoardError unless valid_pos?(end_pos)
+
+    raise InvalidMoveError if self[start_pos].color != current_color
 
     raise InvalidMoveError unless self[start_pos].valid_moves.include?(end_pos)
 
@@ -77,13 +79,12 @@ class Board
 
   # private
   def fill_initial_piece(row_index, col_index)
-    if PIECES_STARTING_ROWS.include?(row_index)
-      if WHITE_STARTING_ROWS.include?(row_index)
-        add_piece_white(row_index, col_index)
-        # return Piece.new(:white, self, [row_index, col_index])
-      else
-        add_piece_black(row_index, col_index)
-      end
+    return nil unless PIECES_STARTING_ROWS.include?(row_index)
+
+    if WHITE_STARTING_ROWS.include?(row_index)
+      add_piece_white(row_index, col_index)
+    else
+      add_piece_black(row_index, col_index)
     end
   end
 
@@ -149,19 +150,6 @@ class Board
     end
 
     raise NoKingError
-  end
-
-  def find_opposing_pieces(color)
-    opposing_pieces = []
-    rows.each do |row|
-      row.each do |tile|
-        opposing_pieces << tile if tile.color == color
-      end
-    end
-
-    raise NoFigureError if opposing_pieces.empty?
-
-    opposing_pieces
   end
 
   def find_color_pieces(color)

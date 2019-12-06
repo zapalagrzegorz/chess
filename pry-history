@@ -1,3 +1,5 @@
+test - postawić grę, graczy i przetestować przekazywanie wartości z tablicy gry
+
 
 load 'display.rb'
 
@@ -19,5 +21,9 @@ board = Board.new
 
 board.test_check_mate
 board.checkmate?(:black)
+
+
+load 'game.rb'
+Game.new.play
 
 

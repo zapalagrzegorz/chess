@@ -42,6 +42,7 @@ class Cursor
   end
 
   def get_input
+    # debugger
     key = KEYMAP[read_char]
     @selected_tile = handle_key(key)
   end

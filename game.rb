@@ -1,23 +1,40 @@
-# Write a Game class that constructs a Board object, then alternates between players (assume two human players for now) prompting them to move. The Game should handle exceptions from Board#move_piece and report them.
+`# frozen_string_literal: true`
 
-# You should write a HumanPlayer class with one method (#make_move). This method should call Cursor#get_input and appropriately handle the different responses (a cursor position or nil). In that case, Game#play method just continuously calls #make_move.
+require "byebug"
+require_relative "board.rb"
+require_relative "display.rb"
+require_relative "human_player.rb"
 
+# Wrapping class
 class Game
-  def initialize()
+  def initialize
     @board = Board.new
-    @display = Display.new
+    @display = Display.new(@board)
     @players = {
-      player1: Player.new,
-      player2: Player.new,
+      player1: HumanPlayer.new(:white, @display),
+      player2: HumanPlayer.new(:black, @display),
     }
-    @current_player = players[:player1]
+    @current_player = @players[:player1]
   end
 
   def play
-    unless @board.checkmate?(@current_player.color)
-      start_pos, end_pos = *@current_player.make_move
-      @board.move_piece(start_pos, end_pos)
+    loop do
+      begin
+        start_pos, end_pos = *@current_player.make_move
+        @board.move_piece(start_pos, end_pos, @current_player.color)
+      rescue InvalidMoveError => e
+        puts e.message
+        sleep(1.5)
+        retry
+      end
+      swap_turn!
+
+      break if @board.checkmate?(@current_player.color)
     end
+
+    @display.render_board
+    swap_turn!
+    puts "\n#{@current_player.color.to_s.capitalize} has win. "
   end
 
   #   private
@@ -25,7 +42,8 @@ class Game
   end
 
   def swap_turn!
-    @current_player = @current_player == :player1 ? players[:player2] : players[:player1]
+    # debugger
+    @current_player = @current_player == @players[:player1] ? @players[:player2] : @players[:player1]
   end
 
   def move_player

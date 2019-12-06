@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 require "byebug"
+
 require "colorize"
 require_relative "cursor"
 require_relative "board"
@@ -35,26 +36,50 @@ class Display
 
       puts printable_board(print_board_options)
 
-      move = @cursor.get_input
-      selected_tiles << move if @board[move].valid_moves.any?
-
       if @debug
-        # debugger
         p @board[@cursor.cursor_pos].valid_moves
-        # debugger
         puts "Is white in check? #{@board.in_check?(:white)}"
 
         puts "Is black in check? #{@board.in_check?(:black)}"
+      end
+
+      move = @cursor.get_input
+      if move
+        if selected_tiles.empty? && @board[move].valid_moves.any?
+          selected_tiles << move
+        else
+          selected_tiles << move
+        end
       end
     end
 
     selected_tiles
   end
 
+  def render_board
+    valid_moves =
+      if selected_tiles.any?
+        @board[selected_tiles[0]].valid_moves
+      else
+        @board[@cursor.cursor_pos].valid_moves
+      end
+
+    print_board_options = {
+      cur_row: @cursor.cursor_pos[0],
+      cur_idx: @cursor.cursor_pos[1],
+      valid_moves: valid_moves,
+    }
+
+    puts printable_board(print_board_options)
+  end
+
   private
 
+  # parametry są destrukturyzowane od razu z hasha przekazywanego
+  # jako argument
   def printable_board(cur_row:, cur_idx:, valid_moves:)
-    printable_board = "#{(0..7).to_a.join(" ")}"
+    printable_board = "   #{(0..7).to_a.join("  
+6  ♟  ♟  ☐  ♟  ♟  ☐  ♟  ♟ ")}"
 
     @board.rows.each_with_index do |row, row_idx|
       printable_board += "\n"

@@ -4,7 +4,7 @@ class InvalidMoveError < StandardError
   end
 end
 
-class NoFigureError < StandardError
+class NoFigureError < InvalidMoveError
   def message
     "No figure found at this position. Please retry"
   end
