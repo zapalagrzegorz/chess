@@ -32,8 +32,8 @@ class Game
       break if @board.checkmate?(@current_player.color)
     end
 
-    @display.render_board
     swap_turn!
+    @display.render_board
     puts "\n#{@current_player.color.to_s.capitalize} has win. "
   end
 
@@ -42,7 +42,6 @@ class Game
   end
 
   def swap_turn!
-    # debugger
     @current_player = @current_player == @players[:player1] ? @players[:player2] : @players[:player1]
   end
 
