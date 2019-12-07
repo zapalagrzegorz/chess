@@ -25,16 +25,12 @@ class Board
   # Write code for #initialize so we can setup the board
   # with instances of Piece in locations where a Queen/Rook/Knight/
   # etc. will start and nil where the NullPiece will start.
-  def initialize
+  def initialize(fill_board = true)
     @sentinel = Null_piece.instance
 
     @rows = Array.new(8) { Array.new(8, @sentinel) }
 
-    @rows.each_index do |row_index|
-      @rows[row_index].each_index do |col_index|
-        fill_initial_piece(row_index, col_index)
-      end
-    end
+    fill_board_tiles if fill_board
   end
 
   def move_piece(start_pos, end_pos, current_color)
@@ -112,61 +108,64 @@ class Board
   end
 
   def test_check_mate
-    move_piece([6, 5], [5, 5])
-    move_piece([1, 4], [3, 4])
-    move_piece([6, 6], [4, 6])
-    move_piece([0, 3], [4, 7])
+    move_piece([6, 5], [5, 5], :white)
+    move_piece([1, 4], [3, 4], :black)
+    move_piece([6, 6], [4, 6], :white)
+
+    # debugger
+    move_piece([0, 3], [4, 7], :black)
     in_check?(:white)
   end
 
-  def deep_dup
-    Marshal.load(Marshal.dump(self))
-    # TODO check it again
+  # def dup
 
-    # return [] if arr.length.zero?
-    # duped_board = board.dup
-    # # debug_index = 0
-    # board.rows.each_with_index do |row, row_idx|
-    #   # debugger
-    #   duped_board.rows[row_idx] = row.dup
-    # end
-    # debugger
-    # row.each_with_index do |tile, tile_idx|
-    # unless tile.empty?
-    # duped_board.rows[row_idx][tile_idx] = tile.dup
-    # end
-    # end
-    # end
-    # duped_board
+  # end
+
+  def deep_dup
+    # round the problem
+    # Marshal.load(Marshal.dump(self))
+
+    # jedna pusta tablica, przekazana jako referencja
+    new_board = Board.new(false)
+
+    pieces.each do |piece|
+      piece_dup = piece.class.new(piece.color, new_board, piece.position)
+      new_board[piece.position] = piece_dup
+    end
+
+    new_board
   end
 
   private
 
-  def find_king(color)
-    rows.each do |row|
-      row.each do |tile|
-        return tile.position if tile.instance_of?(King) && tile.color == color
+  def fill_board_tiles
+    @rows.each_index do |row_index|
+      @rows[row_index].each_index do |col_index|
+        fill_initial_piece(row_index, col_index)
       end
     end
+  end
+
+  def find_king(color)
+    # debugger
+
+    king_pos = pieces.find { |tile| tile.instance_of?(King) && tile.color == color }
+    # debugger
+    return king_pos.position if king_pos.position
 
     raise NoKingError
   end
 
   def find_color_pieces(color)
-    pieces = []
-    rows.each do |row|
-      row.each do |tile|
-        pieces << tile if tile.color == color
-      end
-    end
+    color_pieces = pieces.select { |tile| tile if tile.color == color }
 
-    raise NoFigureError if pieces.empty?
+    return color_pieces unless color_pieces.empty?
 
-    pieces
+    raise NoFigureError
   end
 
-  def king_threathened?(pieces, king_pos)
-    pieces.any? do |piece|
+  def king_threathened?(opposing_pieces, king_pos)
+    opposing_pieces.any? do |piece|
       return true if piece.moves.include?(king_pos)
     end
   end
@@ -187,5 +186,10 @@ class Board
     if row_index.zero?
       add_piece(FIGURE_PIECES[col_index].new(:black, self, pos), pos)
     end
+  end
+
+  # spłaszcz strukturę i przefiltruj
+  def pieces
+    @rows.flatten.reject(&:empty?)
   end
 end

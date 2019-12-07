@@ -4,7 +4,9 @@ require "byebug"
 # require_relative "rook"
 # require_relative "null_piece"
 require "colorize"
+require_relative "../deep_dup"
 
+# Abstract class of Piece
 class Piece
   attr_reader :color, :board
   attr_accessor :position
@@ -17,7 +19,6 @@ class Piece
   end
 
   def to_s
-    # print/ return symbol
     " #{symbol} "
   end
 
@@ -32,7 +33,6 @@ class Piece
     end
 
     valid_moves
-    # move_into_check(move)
   end
 
   def symbol
@@ -49,12 +49,12 @@ class Piece
   private
 
   def move_into_check?(end_pos)
-    # Duplicate the Board and perform the move
-    # debugger
+    # debugger if end_pos == [7, 4]
+
     board_dup = @board.deep_dup
 
-    # Look to see if the player is in check after the move (Board#in_check?)
     board_dup.move_piece!(position, end_pos)
+
     board_dup.in_check?(@color)
   end
 end
